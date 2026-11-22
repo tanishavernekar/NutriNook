@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="100" viewBox="0 0 240 100">
+  <defs>
+    <linearGradient id="glaze" x2=".1" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff5df"/>
+      <stop offset=".48" stop-color="#eadfc4"/>
+      <stop offset=".9" stop-color="#eddfbf"/>
+      <stop offset="1" stop-color="#c5ae86"/>
+    </linearGradient>
+  </defs>
+  <path d="M25 2Q116 1 213 2q24-1 25 23l.5 48q.5 23-23 25-93 1-190-.5Q2 98 1.8 74l.4-48Q2 3 25 2Z"
+        fill="url(#glaze)" stroke="#907b5d" stroke-width="1.8"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M5 31Q3 7 25 5m5-.1Q122 4 203 5" stroke="#fff9eb" stroke-width="2.4"/>
+    <path d="M5 75q1 18 19 19m6 1q90 1 180 0m6-.3q16-2 19-17" stroke="#ad9670" stroke-width="1.1"/>
+  </g>
+</svg>
