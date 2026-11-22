@@ -1,6 +1,11 @@
 name: Publish NutriNook to Pages
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - src/data/pantry.csv
 
 permissions:
   contents: read
