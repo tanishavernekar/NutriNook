@@ -24,7 +24,7 @@ try {
     return icon.naturalWidth;
   }), 64);
   await button("Pantry table").click();
-  assert.equal(await page.locator(".selection-summary").innerText(), "132 food items");
+  assert.equal(await page.locator(".selection-summary").innerText(), "136 food items");
   await button("Close dialog").click();
   await page.getByLabel("Search recipe book").fill("A2 Whole Milk");
   await button("Add A2 Whole Milk").click();

@@ -54,11 +54,13 @@ const revision10 = [
   "Atta (whole wheat flour)", "Rawa (semolina)", "Maida (refined wheat flour)",
   "Fresh grated coconut", "Coconut milk",
 ];
-export const latestStarterRevision = 10;
-export const starterRecipeDishes = [...revision4, ...revision5, ...revision6, ...revision7Dishes, ...revision9Dishes];
+const revision11Dishes = ["Jola bhakri", "Chapati", "Naan", "Butter naan"];
+export const latestStarterRevision = 11;
+export const starterRecipeDishes = [...revision4, ...revision5, ...revision6, ...revision7Dishes, ...revision9Dishes, ...revision11Dishes];
 
 // Used only for additive upgrades from the original 78-food catalog onward.
 export function introducedIn(name: string) {
+  if (revision11Dishes.includes(name)) return 11;
   if (revision10.includes(name)) return 10;
   if (revision9.includes(name)) return 9;
   if (revision7Dishes.includes(name)) return 7;

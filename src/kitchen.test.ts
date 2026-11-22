@@ -56,7 +56,7 @@ describe("plate and library", () => {
         .filter((f) => f.category === name)
         .map((f) => f.name)
         .sort();
-    expect(foods).toHaveLength(132);
+    expect(foods).toHaveLength(136);
     // Keep the original 78 approved definitions pinned independently of later additions.
     const definitions = foods.slice(0, 78).map((f) => [
       f.name,
@@ -96,7 +96,9 @@ describe("plate and library", () => {
       "Aloo paratha",
       "Aloo samosa",
       "Black bean burger",
+      "Butter naan",
       "Chana Masala",
+      "Chapati",
       "Chicken biryani",
       "Chicken burger (fried fillet)",
       "Chicken burger (shredded)",
@@ -113,6 +115,7 @@ describe("plate and library", () => {
       "Fried fish",
       "Fried prawns",
       "Idli",
+      "Jola bhakri",
       "Khaman dhokla",
       "Masala dosa",
       "Massaman curry",
@@ -120,6 +123,7 @@ describe("plate and library", () => {
       "Methi thepla",
       "Misal pav",
       "Moong Dal Chilla",
+      "Naan",
       "Palak paneer",
       "Pani puri",
       "Pav bhaji",
@@ -183,7 +187,7 @@ describe("plate and library", () => {
     expect(bowl.nutrients).toMatchObject({ magnesium: null, vitaminK: null });
     expect(
       foods.filter((f) => f.nutrients.addedSugar !== null).map((f) => f.name),
-    ).toEqual([milk.name, "Black bean burger"]);
+    ).toEqual([milk.name, "Black bean burger", "Jola bhakri", "Chapati"]);
   });
   it("logs independently removable IDs and scales serving snapshots", () => {
     const a = entry(milk, date),
@@ -485,7 +489,7 @@ describe("data exchange", () => {
     }
   });
   it("uses quarter-cup reference servings for the five cooking staples", () => {
-    const foods = seedFoods().slice(127);
+    const foods = seedFoods().slice(127).filter((f) => f.type === "individual");
     expect(foods.every((f) => f.type === "individual" && f.quantity === 0.25 && f.nutrients.addedSugar === null)).toBe(true);
     expect(foods.map((f) => [f.name, f.unit, f.category, f.nutrients.calories, f.nutrients.totalSugar])).toEqual([
       ["Atta (whole wheat flour)", "cup dry", "Grains & Bread", 102, 0.12],
@@ -494,6 +498,23 @@ describe("data exchange", () => {
       ["Fresh grated coconut", "cup", "Everyday Essentials", 71, 1.25],
       ["Coconut milk", "cup", "Everyday Essentials", 111, null],
     ]);
+  });
+  it("adds the four flatbreads once to a revision 10 kitchen without replacing history or restoring deletions", () => {
+    const breads = ["Jola bhakri", "Chapati", "Naan", "Butter naan"];
+    const d = fresh(date);
+    d.starterNutritionRevision = 10;
+    d.foods = d.foods.filter((f) => !breads.includes(f.name) && f.name !== "Eggs");
+    d.entries = [entry(d.foods[0], date)];
+    const upgraded = validateBackup(d);
+    expect(upgraded.foods.slice(0, d.foods.length)).toEqual(d.foods);
+    expect(upgraded.entries).toEqual(d.entries);
+    expect(upgraded.foods.slice(d.foods.length).map((f) =>
+      [f.name, f.type, f.category, f.nutrients.calories, f.nutrients.addedSugar],
+    )).toEqual([
+      ["Jola bhakri", "dish", "Dishes", 144, 0], ["Chapati", "dish", "Dishes", 102, 0],
+      ["Naan", "dish", "Dishes", 262, null], ["Butter naan", "dish", "Dishes", 298, null],
+    ]);
+    expect(validateBackup(upgraded)).toEqual(upgraded);
   });
   it.each([[2, 78], [3, 82], [4, 91], [5, 101], [6, 105], [8, 116], [9, 127]] as const)("adds only newer starters to revision %i and respects personal changes on reload", (revision, count) => {
     const d = fresh(date);

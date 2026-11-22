@@ -69,6 +69,7 @@ export function validateBackup(x: unknown): Kitchen {
       x.starterNutritionRevision !== 7 &&
       x.starterNutritionRevision !== 8 &&
       x.starterNutritionRevision !== 9 &&
+      x.starterNutritionRevision !== 10 &&
       x.starterNutritionRevision !== latestStarterRevision) ||
     (x.profileIsExample !== undefined &&
       typeof x.profileIsExample !== "boolean") ||
