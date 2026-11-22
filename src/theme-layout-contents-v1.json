@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "width": 1920,
+  "height": 1280,
+  "slots": {
+    "jars/contents/calories.webp": [0, 0, 320, 640],
+    "jars/contents/protein.webp": [320, 0, 320, 640],
+    "jars/contents/fiber.webp": [640, 0, 320, 640],
+    "jars/contents/fat.webp": [960, 0, 320, 640],
+    "jars/contents/carbohydrates.webp": [1280, 0, 320, 640],
+    "jars/contents/totalSugar.webp": [1600, 0, 320, 640],
+    "jars/contents/addedSugar.webp": [0, 640, 320, 640],
+    "jars/contents/calcium.webp": [320, 640, 320, 640],
+    "jars/contents/iron.webp": [640, 640, 320, 640],
+    "jars/contents/magnesium.webp": [960, 640, 320, 640],
+    "jars/contents/potassium.webp": [1280, 640, 320, 640],
+    "jars/contents/vitaminK.webp": [1600, 640, 320, 640]
+  }
+}

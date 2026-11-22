@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "width": 1536,
+  "height": 1312,
+  "slots": {
+    "jars/contents/calories.webp": [16, 144, 160, 320],
+    "jars/contents/protein.webp": [187, 144, 160, 320],
+    "jars/contents/fiber.webp": [358, 144, 160, 320],
+    "jars/contents/fat.webp": [529, 144, 160, 320],
+    "jars/contents/carbohydrates.webp": [700, 144, 160, 320],
+    "jars/contents/totalSugar.webp": [871, 144, 160, 320],
+    "jars/contents/addedSugar.webp": [16, 507, 160, 320],
+    "jars/contents/calcium.webp": [187, 507, 160, 320],
+    "jars/contents/iron.webp": [358, 507, 160, 320],
+    "jars/contents/magnesium.webp": [529, 507, 160, 320],
+    "jars/contents/potassium.webp": [700, 507, 160, 320],
+    "jars/contents/vitaminK.webp": [871, 507, 160, 320],
+    "jars/glass-back.png": [1060, 144, 92, 320],
+    "jars/glass-front.png": [1174, 144, 92, 320],
+    "kitchen/ivy.webp": [1360, 144, 125, 426],
+    "kitchen/plant.webp": [1060, 550, 169, 278],
+    "kitchen/sprig.webp": [1320, 680, 166, 98],
+    "kitchen/wall.webp": [16, 918, 768, 329],
+    "shelf/cabinet.webp": [806, 918, 600, 251],
+    "kitchen/wainscot.webp": [806, 1203, 313, 92]
+  }
+}
