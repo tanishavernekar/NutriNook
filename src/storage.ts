@@ -6,14 +6,15 @@ import {
   migrateCategories,
   type Kitchen,
 } from "./model";
-import { seedFoods } from "./data/csv";
+import { seedFoods, starterIdentity } from "./data/csv";
 import { latestStarterRevision } from "./data/starterAdditions";
 import { migrateStarterNutrition } from "./data/starterNutrition";
 import { exampleProfile, recommendations } from "./data/recommendations";
-export const fresh = (date = localDate()): Kitchen => ({
+export const fresh = (date = localDate(), foods = seedFoods()): Kitchen => ({
   version: 1,
   starterNutritionRevision: latestStarterRevision,
-  foods: seedFoods(),
+  foods,
+  starterItemsSeen: foods.map((f) => starterIdentity(f.name, f.brand)),
   entries: [],
   categories: [...categoryNames],
   dishes: [],
@@ -59,6 +60,7 @@ export function validateBackup(x: unknown): Kitchen {
   if (
     !record(x) ||
     x.version !== 1 ||
+    (x.starterItemsSeen !== undefined && !list(x.starterItemsSeen, str)) ||
     (x.starterNutritionRevision !== undefined &&
       x.starterNutritionRevision !== 1 &&
       x.starterNutritionRevision !== 2 &&

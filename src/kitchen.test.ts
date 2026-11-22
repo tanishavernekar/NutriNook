@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createHash } from "node:crypto";
 import legacyPantry from "./data/legacy/pantry-v1.csv?raw";
 import {
@@ -30,6 +30,9 @@ import {
 import { recommendations } from "./data/recommendations";
 import { fresh, validateBackup } from "./storage";
 import { PlateHistory, replaceDay } from "./history";
+// These historical migration fixtures depend on exact old row order and counts.
+// The live CSV is independently validated by starterCatalog.test.ts.
+vi.mock("./data/pantry.csv?raw", () => import("./data/legacy/pantry-v11.csv?raw"));
 const milk = seedFoods().find((f) => f.name === "A2 Whole Milk")!,
   date = "2026-01-12",
   goal: Goal = {

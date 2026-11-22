@@ -675,6 +675,15 @@ try {
   });
   for (const width of [360, 864, 1280]) {
     await page.setViewportSize({ width, height: 860 });
+    const hint = await dialog().locator(".pantry-copy-entry .sheet-count").innerText();
+    assert.equal(hint.includes("Ctrl+C"), width > 650);
+    if (width === 360) {
+      const summary = await selectionSummary.boundingBox();
+      for (const action of await dialog().locator(".pantry-selection button").all()) {
+        const box = await action.boundingBox();
+        assert.ok(box.y >= summary.y + summary.height && box.x + box.width <= width);
+      }
+    }
     const toolbarLayout = await dialog()
       .locator(".pantry-toolbar")
       .evaluate((el) => {

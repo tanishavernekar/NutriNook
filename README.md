@@ -19,6 +19,8 @@ Open **http://127.0.0.1:5187/**. No API key, account or backend is needed. The a
 
 ## Your first plate
 
+Select the **?** button in the kitchen toolbar to open the **Kitchen manual**. Each postage-stamp close-up shows a real control, with a short caption: follow the scales to set a goal, the plus to serve a food, or the sliders to find your backup. On phones, the pantry footer puts its count above the action buttons and shows tap instructions instead of desktop shortcuts.
+
 The recipe book sizes itself to show every collapsed category without scrolling inside the book. When you expand categories, longer food lists scroll within the page.
 
 On phones the shelf art, headings, and page margins are smaller. The shelf follows a swipe and settles on a jar when you lift your finger; tapping an arrow glides through the jars. With reduced motion enabled in the kitchen or on your device, the arrows move immediately. The arrows, food-row actions, and ingredient steppers keep at least 44-pixel tap targets; the layout does not rely on zooming out the page.
@@ -60,9 +62,11 @@ For touch selection, keyboard range selection, or headings, choose **Select cell
 
 The count below the table shows the total number of pantry foods until you select rows or cells. To delete multiple pantry foods, check the boxes beside their names, choose **Delete selected** below the table, and confirm. The checkbox beside **Food item** selects all foods in the current view. Individual selections stay checked across filters; the count flags hidden selections before deletion. Foods used in saved dishes can be copied but not deleted. Deleting pantry foods never changes logged plates.
 
-`src/data/pantry.csv` supplies **136 distinct starter items**. It includes the simplified pantry names, cooked cup servings for the added vegetables, grains and pulses, and a 1-cup serving for guava. The CSV's _Sugar (g)_ is total sugar. _Added sugar (g)_ is separate and remains blank when unreported.
+**Add a starter in one commit:** On GitHub open `src/data/pantry.csv`, click the pencil, append a row, and commit to `main`. Keep the header order. The optional last column (after Brand) is **Category**: enter `Dishes` for a prepared dish, or a shelf such as `Grains & Bread`. With no category, familiar foods are classified by name and unfamiliar ones go to `Needs category`. The old 15-field row format still works. Enter nutrients per listed serving; keep unknown values blank, measured zeroes as `0`, and total sugar separate from added sugar. Quote names containing commas.
 
-Revision 11 adds four one-piece dishes to starter kitchens: jola bhakri (40 g sorghum flour), chapati (30 g whole-wheat flour), naan (90 g plain naan) and butter naan (the same naan plus 5 g unsalted butter). To publish a starter change, register its category and catalog revision as well as its CSV row, keep the previous revision valid for saved journals, update the catalog checks, and run **Publish NutriNook to Pages** after committing. A CSV commit alone does not deploy the site.
+The Pages workflow checks the CSV, builds, and publishes automatically on pantry commits. If it fails, open the failed check for the offending row; the previous deployment stays online. On the next load, starter kitchens receive only newly offered name/brand pairs. Existing foods, past meals, deleted items, and entirely custom or empty libraries are preserved. Entering a food in the app itself still edits only your own journal.
+
+Revision 11 was the last numbered starter update. It added four one-piece dishes: jola bhakri (40 g sorghum flour), chapati (30 g whole-wheat flour), naan (90 g plain naan) and butter naan (the same naan plus 5 g unsalted butter).
 
 The 127-item pantry gains five quarter-cup cooking staples on reload. USDA SR Legacy dry weights are 30 g for [atta (whole wheat flour)](https://fdc.nal.usda.gov/food-details/168893/nutrients), 41.75 g for [rawa (unenriched semolina)](https://fdc.nal.usda.gov/food-details/168933/nutrients), and 31.25 g for [maida (unenriched all-purpose wheat flour)](https://fdc.nal.usda.gov/food-details/169761/nutrients). [Fresh grated coconut](https://fdc.nal.usda.gov/food-details/170169/nutrients) uses 20 g; [full-fat canned coconut milk](https://fdc.nal.usda.gov/food-details/170173/nutrients) uses 56.5 g. Both are cooking ingredients on the Everyday Essentials shelf.
 
@@ -205,6 +209,6 @@ The browser check starts a fresh isolated Chrome profile, logs food, changes por
 
 Deploy `dist/` to a static HTTPS host (for example, GitHub Pages, Netlify or Cloudflare Pages). Set the build command to `npm run build` and publish directory to `dist`. Relative asset paths support a subdirectory. Deployment does **not** upload your local journal; export and restore a JSON backup to move it to a new origin.
 
-**Publishing the source ZIP on GitHub:** Extract it first. Copy the **contents** of `nutrinook/` into your repository root, including `.github/` and `.gitignore`; `package.json` should sit beside `README.md`. Commit the source files, not the ZIP or `node_modules/`. To publish the site, choose **Settings → Pages → Source: GitHub Actions**, then **Actions → Publish NutriNook to Pages → Run workflow** on your intended branch. The workflow tests and builds the app and publishes only `dist/`. It does not run automatically on push.
+**Publishing the source ZIP on GitHub:** Extract it first. Copy the **contents** of `nutrinook/` into your repository root, including `.github/` and `.gitignore`; `package.json` should sit beside `README.md`. Commit the source files, not the ZIP or `node_modules/`. Choose **Settings → Pages → Source: GitHub Actions**. Commits changing `src/data/pantry.csv` on `main` trigger a build and deploy; for other changes choose **Actions → Publish NutriNook to Pages → Run workflow**. Only the tested build in `dist/` is published.
 
 Third-party notices for the bundled runtimes, icons and fonts are in [`public/licenses/`](public/licenses/); they are included in the static build.

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Redo2, Scale, Settings2, Sheet, Undo2 } from "lucide-react";
+import { CircleHelp, Redo2, Scale, Settings2, Sheet, Undo2 } from "lucide-react";
+import { KitchenManual } from "./KitchenManual";
 import {
   entry,
   goalsOn,
@@ -44,7 +45,7 @@ type Panel =
   | { kind: "dish"; dish?: Dish }
   | { kind: "nutrition" | "quantity"; e: Entry }
   | { kind: "jar"; k: Key; view: NutrientView }
-  | { kind: "calendar" | "goals" | "settings" | "pantry" | "plate" };
+  | { kind: "calendar" | "goals" | "settings" | "pantry" | "plate" | "manual" };
 function App({ initial }: { initial: Kitchen }) {
   const [data, set] = useState(initial),
     [date, setDate] = useState(localDate()),
@@ -400,6 +401,8 @@ function App({ initial }: { initial: Kitchen }) {
             }}
           />,
         ] as const;
+      case "manual":
+        return ["Kitchen manual", <KitchenManual />] as const;
       case "settings":
         return [
           "Kitchen settings",
@@ -466,6 +469,9 @@ function App({ initial }: { initial: Kitchen }) {
         onClick={() => open({ kind: "settings" })}
       >
         <Settings2 />
+      </button>
+      <button aria-label="Kitchen manual" title="Kitchen manual" onClick={() => { sound("book"); open({ kind: "manual" }); }}>
+        <CircleHelp aria-hidden="true" />
       </button>
     </nav>
   );
@@ -544,6 +550,7 @@ function App({ initial }: { initial: Kitchen }) {
           key={sugarSettings ? "sugar-settings" : "panel"}
           title={content[0]}
           close={close}
+          scrollLabel={panel?.kind === "manual" ? "Scroll kitchen manual" : undefined}
           headerAction={
             panel?.kind === "jar" && (
               <button

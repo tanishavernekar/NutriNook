@@ -23,8 +23,27 @@ try {
     await icon.decode();
     return icon.naturalWidth;
   }), 64);
+  await button("Kitchen manual").click();
+  const manual = page.getByRole("region", { name: "Scroll kitchen manual" });
+  assert.equal(await manual.getByRole("heading", { level: 3 }).count(), 4);
+  assert.equal(await manual.getByRole("img").count(), 12);
+  await manual.evaluate(async (el) => {
+    await Promise.all(Array.from(el.querySelectorAll("img"), (img) => img.decode()));
+  });
+  assert.ok(await manual.locator("figure").evaluateAll((figures) => figures.every(
+    (figure) => figure.querySelector("img")?.alt && figure.querySelector("figcaption")?.textContent.trim(),
+  )));
+  await manual.focus();
+  await page.keyboard.press("End");
+  await page.waitForFunction(() => {
+    const el = document.querySelector(".manual-page")?.parentElement;
+    return el && el.scrollTop > 0 && el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+  });
+  await button("Close dialog").click();
   await button("Pantry table").click();
-  assert.equal(await page.locator(".selection-summary").innerText(), "136 food items");
+  const rows = await page.locator(".edit-scroll tbody tr").count();
+  assert.ok(rows > 0);
+  assert.equal(await page.locator(".selection-summary").innerText(), `${rows} food items`);
   await button("Close dialog").click();
   await page.getByLabel("Search recipe book").fill("A2 Whole Milk");
   await button("Add A2 Whole Milk").click();

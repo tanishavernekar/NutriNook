@@ -112,12 +112,15 @@ export function preview(
             f.name.toLowerCase() === name.toLowerCase() &&
             f.brand.toLowerCase() === brand.toLowerCase(),
         );
+      const seedCategory = get("category");
+      const reviewed = seed ? starterCategory(name) : undefined;
       const category = seed
-        ? starterCategory(name)
+        ? seedCategory || reviewed || inferFoodCategory(name, categories, [])
         : explicit ||
           (match && match.category) ||
           inferFoodCategory(name, categories, existing);
-      if (!category) throw Error(`No reviewed starter category for ${name}.`);
+      if (seedCategory && seed && ![...categories, "Needs category"].includes(seedCategory))
+        throw Error(`Unknown starter category "${seedCategory}".`);
       foods.push({
         id: uid(),
         name,
@@ -127,7 +130,7 @@ export function preview(
           ? { autoCategory: true }
           : {}),
         ...portion,
-        type: !seed ? "custom" : starterRecipeDishes.includes(name) ? "dish" : "individual",
+        type: !seed ? "custom" : (seedCategory ? category === "Dishes" : starterRecipeDishes.includes(name)) ? "dish" : "individual",
         favorite: false,
         archived: false,
         createdAt: stamp(),
@@ -170,11 +173,30 @@ export function mergeFoods(
   return result;
 }
 export function seedFoods(source = raw) {
-  const [head, ...rows] = parseCSV(source),
-    p = preview(rows, mapping(head), { seed: true });
+  const [head, ...rows] = parseCSV(source);
+  if (!head) throw Error("The starter CSV needs a header.");
+  const map = mapping(head);
+  // The original import sheet had repeated rows and headings. The maintained
+  // catalog adds an optional last column and checks data before publication.
+  if (map.category >= 0) {
+    if (columns.some((c) => map[c] < 0)) throw Error("Missing starter CSV column.");
+    const seen = new Set<string>();
+    rows.forEach((r, i) => {
+      const error = (message: string) => { throw Error(`Row ${i + 2}: ${message}`); };
+      if (r.length !== head.length && !(map.category === head.length - 1 && r.length === head.length - 1))
+        error(`Expected ${head.length} columns (last Category is optional); found ${r.length}.`);
+      if (!r[map.quantity]) error("Missing serving.");
+      const id = starterIdentity(r[map.name], r[map.brand]);
+      if (seen.has(id)) error(`Duplicate starter "${r[map.name]}".`);
+      seen.add(id);
+    });
+  }
+  const p = preview(rows, map, { seed: true });
   if (p.errors.length) throw Error(p.errors.join("\n"));
   return mergeFoods([], p.foods, "skip");
 }
+export const starterIdentity = (name: string, brand: string) =>
+  JSON.stringify([name.trim().toLowerCase(), brand.trim().toLowerCase()]);
 export function exportCSV(foods: Food[]) {
   const escape = (v: string | number | null) =>
     `"${String(v ?? "").replaceAll('"', '""')}"`;

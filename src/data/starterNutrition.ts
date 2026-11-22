@@ -1,8 +1,9 @@
 import { keys, type Food, type Kitchen, type Nutrients } from "../model";
-import { seedFoods } from "./csv";
+import { seedFoods, starterIdentity as identity } from "./csv";
 import { introducedIn, latestStarterRevision } from "./starterAdditions";
 import { needsCategory } from "./foodCategory";
 import legacyCSV from "./legacy/pantry-v1.csv?raw";
+import revision11CSV from "./legacy/pantry-v11.csv?raw";
 
 // Pre-audit values, solely to recognize untouched starter nutrition in old journals.
 // Compare against the original serving, even if a later release changes its unit.
@@ -66,9 +67,6 @@ function matchesStarter(food: Food, old: StarterDefinition | undefined) {
   );
 }
 
-const identity = (name: string, brand: string) =>
-  JSON.stringify([name.trim().toLowerCase(), brand.trim().toLowerCase()]);
-
 const retiredTea: StarterDefinition = {
   brand: "Taste Nirvana", category: "Beverages", type: "individual", quantity: 1, unit: "cup",
   nutrients: {
@@ -91,11 +89,11 @@ function retireBeverages(kitchen: Kitchen): Kitchen {
   return { ...kitchen, foods, categories: [...categories] };
 }
 
-export function migrateStarterNutrition(kitchen: Kitchen): Kitchen {
+function upgradeNumberedCatalog(kitchen: Kitchen, baseline: Food[]): Kitchen {
   const revision = kitchen.starterNutritionRevision;
   if (revision === latestStarterRevision) return kitchen;
   if ((revision ?? 0) < 8) kitchen = retireBeverages(kitchen);
-  const current = new Map(seedFoods().map((f) => [f.name, f]));
+  const current = new Map(baseline.map((f) => [f.name, f]));
   if (revision !== undefined && revision >= 2) {
     const hasStarter = kitchen.foods.some(
       (f) => introducedIn(f.name) <= revision && matchesStarter(f, current.get(f.name)),
@@ -146,4 +144,21 @@ export function migrateStarterNutrition(kitchen: Kitchen): Kitchen {
       foods.push(f);
   }
   return { ...d, foods, starterNutritionRevision: latestStarterRevision };
+}
+
+const keyFor = (f: Food) => identity(f.name, f.brand);
+export function migrateStarterNutrition(kitchen: Kitchen, catalog = seedFoods()): Kitchen {
+  // On the first CSV-based upgrade, treat all v11 items as already offered,
+  // including ones the user deleted or renamed before this feature existed.
+  const baseline = (!kitchen.starterItemsSeen || kitchen.starterNutritionRevision !== latestStarterRevision)
+    ? seedFoods(revision11CSV) : [];
+  const d = upgradeNumberedCatalog(kitchen, baseline);
+  const seen = new Set(d.starterItemsSeen ?? baseline.map(keyFor));
+  const occupied = new Set(d.foods.map(keyFor));
+  const keepUpdating = d.foods.some((f) => f.type !== "custom" && seen.has(keyFor(f)));
+  const additions = catalog.filter((f) => !seen.has(keyFor(f)) && !occupied.has(keyFor(f)) && keepUpdating);
+  const size = seen.size;
+  for (const food of catalog) seen.add(keyFor(food));
+  if (d.starterItemsSeen && size === seen.size) return d;
+  return { ...d, foods: [...d.foods, ...additions], starterItemsSeen: [...seen] };
 }

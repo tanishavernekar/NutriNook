@@ -95,6 +95,7 @@ export type Settings = {
 export type Kitchen = {
   version: 1;
   starterNutritionRevision?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  starterItemsSeen?: string[];
   foods: Food[];
   entries: Entry[];
   categories: string[];

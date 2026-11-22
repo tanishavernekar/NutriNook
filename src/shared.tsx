@@ -6,10 +6,12 @@ export function Modal({
   children,
   className,
   headerAction,
+  scrollLabel,
 }: {
   title: string;
   className?: string;
   headerAction?: ReactNode;
+  scrollLabel?: string;
   close: () => void;
   children: ReactNode;
 }) {
@@ -36,7 +38,8 @@ export function Modal({
           <X />
         </button>
       </header>
-      <div className="modal-body">{children}</div>
+      <div className="modal-body" role={scrollLabel ? "region" : undefined}
+        aria-label={scrollLabel} tabIndex={scrollLabel ? 0 : undefined}>{children}</div>
     </dialog>
   );
 }

@@ -813,9 +813,9 @@ export function PantryTable({
               Select cells to copy
             </button>
             <p className="sheet-count">
-              Check a box to copy a full row, or drag across cells and press ⌘C
-              / Ctrl+C. Click a value to edit. Blank nutrients are unavailable,
-              not zero.
+              <span className="pantry-keyboard-hint">Check a box to copy a full row, or drag across cells and press ⌘C / Ctrl+C. Click a value to edit.</span>
+              <span className="pantry-touch-hint">Check a row, then tap Copy. Tap a value to edit.</span>{" "}
+              Blank nutrients are unavailable, not zero.
             </p>
           </div>
         </>
