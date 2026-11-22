@@ -1,0 +1,17 @@
+{
+  "width": 183,
+  "height": 640,
+  "glassBase": "#f9f4ea",
+  "interior": {
+    "left": 0.12021857923497267,
+    "right": 0.8852459016393442,
+    "neckTop": 0.16875,
+    "shoulder": 0.20625,
+    "bottom": 0.95625
+  },
+  "shelf": {
+    "width": 1200,
+    "height": 501,
+    "plankTop": 399
+  }
+}

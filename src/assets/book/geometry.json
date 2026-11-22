@@ -1,0 +1,66 @@
+{
+  "page": {
+    "width": 1329,
+    "height": 912,
+    "slice": [
+      109,
+      100,
+      109,
+      153
+    ]
+  },
+  "ring": {
+    "top": 64,
+    "bottom": 54,
+    "width": 93,
+    "period": 88
+  },
+  "tab": {
+    "width": 313,
+    "height": 81
+  },
+  "tab-active": {
+    "width": 314,
+    "height": 81
+  },
+  "search": {
+    "width": 539,
+    "height": 66
+  },
+  "clear": {
+    "width": 68,
+    "height": 68
+  },
+  "check": {
+    "width": 74,
+    "height": 74
+  },
+  "check-on": {
+    "width": 76,
+    "height": 75
+  },
+  "portion": {
+    "width": 219,
+    "height": 72
+  },
+  "portion-edit": {
+    "width": 199,
+    "height": 72
+  },
+  "side-tab": {
+    "width": 79,
+    "height": 142
+  },
+  "thumb": {
+    "width": 40,
+    "height": 142
+  },
+  "divider": {
+    "width": 448,
+    "height": 10
+  },
+  "tab-open": {
+    "width": 313,
+    "height": 95
+  }
+}
