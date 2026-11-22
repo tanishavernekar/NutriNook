@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#babddf" />
+    <title>NutriNook</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="/nutrinook-icon.png" />
+  </head>
+  <body>
+    <div id="root">
+      <main id="source-help" hidden>
+        <h1>Opening NutriNook</h1>
+        <p>This is the source edition. To open the kitchen by double-clicking, unzip the <strong>Open directly</strong> edition and open its index.html instead.</p>
+        <p>To run this source folder, open a terminal here, run <code>npm ci</code> and then <code>npm run dev</code>. Open <a href="http://127.0.0.1:5187/">http://127.0.0.1:5187/</a> in your browser.</p>
+      </main>
+    </div>
+    <script>
+      if (location.protocol === "file:") document.getElementById("source-help").hidden = false;
+    </script>
+    <noscript>Enable JavaScript to open NutriNook.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
